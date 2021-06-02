@@ -65,6 +65,11 @@ include '../../common/view/header.html.php';
         <td class='w-p50'><?php echo html::input('ldapName', $config->ldap->name, "class='form-control'");?></td>
       </tr>
       <tr>
+        <th class='w-p25'><?php echo $lang->ldap->group; ?></th>
+		<td class='w-p50'><?php echo html::select('group', $groupList, (!empty($group) ? $group : ''), "class='form-control chosen'");?></td>
+		<td><?php echo $lang->ldap->placeholder->group;?></td>
+      </tr>
+      <tr>
         <td class='w-p25'></td>
         <td class="text-center">
           <?php 

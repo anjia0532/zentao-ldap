@@ -23,6 +23,9 @@ $lang->ldap->save 			= 'Save';
 $lang->ldap->test 			= 'Connect Test';
 $lang->ldap->mail 			= 'EMail:';
 $lang->ldap->name  			= 'Name Attrubte:';
+$lang->ldap->group  			= 'Default Group:';
+
+$lang->ldap->placeholder->group 	= 'Add a default group to users who have passed through LDAP.';
 
 $lang->ldap->methodOrder[5] = 'index';
 $lang->ldap->methodOrder[10] = 'setting';

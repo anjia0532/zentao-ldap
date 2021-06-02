@@ -23,6 +23,9 @@ $lang->ldap->save 			= '保存设置';
 $lang->ldap->test 			= '测试连接';
 $lang->ldap->mail 			= 'EMail 字段:';
 $lang->ldap->name  			= '姓名字段:';
+$lang->ldap->group  			= '默認許可權:';
+
+$lang->ldap->placeholder->group 	= '為從ldap通過過來的用戶添加一個默認許可權';
 
 $lang->ldap->methodOrder[5] = 'index';
 $lang->ldap->methodOrder[10] = 'setting';

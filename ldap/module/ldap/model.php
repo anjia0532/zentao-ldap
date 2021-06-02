@@ -69,6 +69,7 @@ class ldapModel extends model
     {
         $ldapUsers = $this->getUsers($config);
         $user = new stdclass();
+        $group = new stdClass(); // 保存同步ldap数据设置的默认权限分组信息
         $account = '';
         $i=0;
         for (; $i < $ldapUsers['count']; $i++) {         
@@ -76,12 +77,16 @@ class ldapModel extends model
             $user->email = $ldapUsers[$i][$config->mail][0];
             $user->realname = $ldapUsers[$i][$config->name][0];
 
+            $group->account = $ldapUsers[$i][$config->uid][0];
+			$group->group = (!empty($config->group) ? $config->group : $this->config->ldap->group); //由于默认权限分组标识不在ldap内存储，所以直接从config中拿。为了兼容zentao自带定时任务所以用了三目运算符
             $account = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($user->account)->fetch('account');
             if ($account == $user->account) {
                 $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($user->account)->autoCheck()->exec();
             } else {
-                $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+                $this->dao->insert(TABLE_USER)->data($user)->exec();
+            	$this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
             }
+
 
             if(dao::isError()) 
             {

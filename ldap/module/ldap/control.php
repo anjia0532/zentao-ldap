@@ -31,13 +31,23 @@ class ldap extends control
 
     public function setting() 
     {
+    	$groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groupList = array('' => '');
+        foreach($groups as $group)
+        {
+            $groupList[$group->id] = $group->name;
+        }
+	
         $this->view->title      = $this->lang->ldap->common . $this->lang->colon . $this->lang->ldap->setting;
         $this->view->position[] = html::a(inlink('index'), $this->lang->ldap->common);
         $this->view->position[] = $this->lang->ldap->setting;
 
+		$this->view->group  = $this->config->ldap->group; // 用于显示权限分组选项，供用户自行选择
+		$this->view->groupList  = $groupList;
+
         $this->display();
     }
-
+ 
     public function save()
     {
         if (!empty($_POST)) {
@@ -50,6 +60,7 @@ class ldap extends control
             $this->config->ldap->uid = $this->post->ldapAttr;
             $this->config->ldap->mail = $this->post->ldapMail;
             $this->config->ldap->name = $this->post->ldapName;
+            $this->config->ldap->group = $this->post->group;
 
             // 此处我们把配置写入配置文件
             $ldapConfig = "<?php \n"
@@ -62,7 +73,8 @@ class ldap extends control
                           ."\$config->ldap->searchFilter = '{$this->post->ldapFilter}';\n"
                           ."\$config->ldap->uid = '{$this->post->ldapAttr}';\n"
                           ."\$config->ldap->mail = '{$this->post->ldapMail}';\n"
-                          ."\$config->ldap->name = '{$this->post->ldapName}';\n";
+                          ."\$config->ldap->name = '{$this->post->ldapName}';\n"
+                          ."\$config->ldap->group = '{$this->post->group}';\n";
 
             $file = fopen("config.php", "w") or die("Unable to open file!");
             fwrite($file, $ldapConfig); 
